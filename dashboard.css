@@ -23,3 +23,6 @@ body{
 .task h3{
     margin: 0 0 10px;
 }
+button:hover{
+    background: #a400b3 ;
+}

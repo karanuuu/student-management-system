@@ -72,3 +72,7 @@ function logout() {
 
 // Load tasks when page loads
 getTasks();
+
+function goToNotifications() {
+  window.location.href = "notifications.html";
+}
