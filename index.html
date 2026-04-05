@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Assignment Manager</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <a href="#" onclick="showPage('tasks')" class="nav-link active">Tasks</a>
+    <a href="#" onclick="showPage('create')" class="nav-link">Create Task</a>
+  </nav>
+
+  <div class="container">
+    <!-- Task List -->
+    <section id="tasks" class="page">
+      <h1>All Tasks</h1>
+      <ul id="taskList"></ul>
+    </section>
+
+    <!-- Create Task -->
+    <section id="create" class="page hidden">
+      <h1>Create a New Task</h1>
+      <form id="taskForm" class="card">
+        <input type="text" id="title" placeholder="Task Title" required>
+        <textarea id="description" placeholder="Description"></textarea>
+        <select id="priority">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+        <input type="date" id="deadline" required>
+        <button type="submit">Create Task</button>
+      </form>
+    </section>
+
+    <!-- Task Details -->
+    <section id="details" class="page hidden">
+      <button onclick="showPage('tasks')" class="back-btn">← Back to Tasks</button>
+      <h1 id="detailTitle"></h1>
+      <p id="detailDescription"></p>
+      <p><strong>Deadline:</strong> <span id="detailDeadline"></span></p>
+      <p><strong>Priority:</strong> <span id="detailPriority"></span></p>
+
+      <div id="commentsSection">
+        <h3>Comments</h3>
+        <ul id="comments"></ul>
+        <input type="text" id="newComment" placeholder="Add a comment...">
+        <button id="addComment">Add</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
