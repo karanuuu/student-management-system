@@ -1,15 +1,15 @@
-const db = require('../config/db');
+const db = require("../config/db");
 
 const formatDate = (dateStr) => {
   if (!dateStr) return null;
   const date = new Date(dateStr);
-  return date.toLocaleString('en-KE', {
-    timeZone: 'Africa/Nairobi',
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+  return date.toLocaleString("en-KE", {
+    timeZone: "Africa/Nairobi",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
     hour12: true,
   });
 };
@@ -17,15 +17,15 @@ const formatDate = (dateStr) => {
 const formatDeadline = (dateStr) => {
   if (!dateStr) return null;
   const date = new Date(dateStr);
-  return date.toLocaleDateString('en-KE', {
-    timeZone: 'Africa/Nairobi',
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
+  return date.toLocaleDateString("en-KE", {
+    timeZone: "Africa/Nairobi",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   });
 };
 
-// CREATE A TASK 
+// CREATE A TASK
 // POST /api/tasks
 const createTask = async (req, res) => {
   try {
@@ -33,11 +33,13 @@ const createTask = async (req, res) => {
     const created_by = req.user.id;
 
     if (!title) {
-      return res.status(400).json({ message: 'Title is required.' });
+      return res.status(400).json({ message: "Title is required." });
     }
 
-    if (!['low', 'medium', 'high'].includes(priority)) {
-      return res.status(400).json({ message: 'Priority must be low, medium or high.' });
+    if (!["Low", "Medium", "High"].includes(priority)) {
+      return res
+        .status(400)
+        .json({ message: "Priority must be low, medium or high." });
     }
 
     const [result] = await db.query(
@@ -47,13 +49,12 @@ const createTask = async (req, res) => {
     );
 
     res.status(201).json({
-      message: 'Task created successfully.',
+      message: "Task created successfully.",
       task_id: result.insertId,
     });
-
   } catch (error) {
-    console.error('Create task error:', error);
-    res.status(500).json({ message: 'Server error while creating task.' });
+    console.error("Create task error:", error);
+    res.status(500).json({ message: "Server error while creating task." });
   }
 };
 
@@ -80,17 +81,16 @@ const getAllTasks = async (req, res) => {
     );
 
     res.status(200).json({
-        total: tasks.length,
-        tasks: tasks.map((task) => ({
-            ...task,
-            deadline: formatDeadline(task.deadline),
-            created_at: formatDate(task.created_at),
-        })),
+      total: tasks.length,
+      tasks: tasks.map((task) => ({
+        ...task,
+        deadline: formatDeadline(task.deadline),
+        created_at: formatDate(task.created_at),
+      })),
     });
-
   } catch (error) {
-    console.error('Get all tasks error:', error);
-    res.status(500).json({ message: 'Server error while fetching tasks.' });
+    console.error("Get all tasks error:", error);
+    res.status(500).json({ message: "Server error while fetching tasks." });
   }
 };
 
@@ -119,36 +119,32 @@ const getTask = async (req, res) => {
     );
 
     if (tasks.length === 0) {
-      return res.status(404).json({ message: 'Task not found.' });
+      return res.status(404).json({ message: "Task not found." });
     }
 
     const task = tasks[0];
     res.status(200).json({
-        ...task,
-        deadline: formatDeadline(task.deadline),
-        created_at: formatDate(task.created_at),
+      ...task,
+      deadline: formatDeadline(task.deadline),
+      created_at: formatDate(task.created_at),
     });
-
   } catch (error) {
-    console.error('Get task error:', error);
-    res.status(500).json({ message: 'Server error while fetching task.' });
+    console.error("Get task error:", error);
+    res.status(500).json({ message: "Server error while fetching task." });
   }
 };
 
-//UPDATE TASK 
+//UPDATE TASK
 // PUT /api/tasks/:id
 const updateTask = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description, priority, deadline } = req.body;
 
-    const [tasks] = await db.query(
-      'SELECT id FROM tasks WHERE id = ?',
-      [id]
-    );
+    const [tasks] = await db.query("SELECT id FROM tasks WHERE id = ?", [id]);
 
     if (tasks.length === 0) {
-      return res.status(404).json({ message: 'Task not found.' });
+      return res.status(404).json({ message: "Task not found." });
     }
 
     await db.query(
@@ -158,11 +154,10 @@ const updateTask = async (req, res) => {
       [title, description, priority, deadline, id]
     );
 
-    res.status(200).json({ message: 'Task updated successfully.' });
-
+    res.status(200).json({ message: "Task updated successfully." });
   } catch (error) {
-    console.error('Update task error:', error);
-    res.status(500).json({ message: 'Server error while updating task.' });
+    console.error("Update task error:", error);
+    res.status(500).json({ message: "Server error while updating task." });
   }
 };
 
@@ -173,29 +168,26 @@ const updateTaskStatus = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
 
-    if (!['pending', 'in_progress', 'completed'].includes(status)) {
-      return res.status(400).json({ message: 'Status must be pending, in_progress or completed.' });
+    if (!["pending", "in_progress", "completed"].includes(status)) {
+      return res
+        .status(400)
+        .json({ message: "Status must be pending, in_progress or completed." });
     }
 
-    const [tasks] = await db.query(
-      'SELECT id FROM tasks WHERE id = ?',
-      [id]
-    );
+    const [tasks] = await db.query("SELECT id FROM tasks WHERE id = ?", [id]);
 
     if (tasks.length === 0) {
-      return res.status(404).json({ message: 'Task not found.' });
+      return res.status(404).json({ message: "Task not found." });
     }
 
-    await db.query(
-      'UPDATE tasks SET status = ? WHERE id = ?',
-      [status, id]
-    );
+    await db.query("UPDATE tasks SET status = ? WHERE id = ?", [status, id]);
 
-    res.status(200).json({ message: 'Task status updated successfully.' });
-
+    res.status(200).json({ message: "Task status updated successfully." });
   } catch (error) {
-    console.error('Update status error:', error);
-    res.status(500).json({ message: 'Server error while updating task status.' });
+    console.error("Update status error:", error);
+    res
+      .status(500)
+      .json({ message: "Server error while updating task status." });
   }
 };
 
@@ -205,26 +197,22 @@ const deleteTask = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const [tasks] = await db.query(
-      'SELECT id FROM tasks WHERE id = ?',
-      [id]
-    );
+    const [tasks] = await db.query("SELECT id FROM tasks WHERE id = ?", [id]);
 
     if (tasks.length === 0) {
-      return res.status(404).json({ message: 'Task not found.' });
+      return res.status(404).json({ message: "Task not found." });
     }
 
-    await db.query('DELETE FROM tasks WHERE id = ?', [id]);
+    await db.query("DELETE FROM tasks WHERE id = ?", [id]);
 
-    res.status(200).json({ message: 'Task deleted successfully.' });
-
+    res.status(200).json({ message: "Task deleted successfully." });
   } catch (error) {
-    console.error('Delete task error:', error);
-    res.status(500).json({ message: 'Server error while deleting task.' });
+    console.error("Delete task error:", error);
+    res.status(500).json({ message: "Server error while deleting task." });
   }
 };
 
-// ASSIGN TASK 
+// ASSIGN TASK
 // POST /api/tasks/:id/assign
 const assignTask = async (req, res) => {
   try {
@@ -232,37 +220,34 @@ const assignTask = async (req, res) => {
     const { assigned_to } = req.body;
 
     if (!assigned_to) {
-      return res.status(400).json({ message: 'assigned_to (user id) is required.' });
+      return res
+        .status(400)
+        .json({ message: "assigned_to (user id) is required." });
     }
 
-    const [tasks] = await db.query(
-      'SELECT id FROM tasks WHERE id = ?',
-      [id]
-    );
+    const [tasks] = await db.query("SELECT id FROM tasks WHERE id = ?", [id]);
 
     if (tasks.length === 0) {
-      return res.status(404).json({ message: 'Task not found.' });
+      return res.status(404).json({ message: "Task not found." });
     }
 
-    const [users] = await db.query(
-      'SELECT id FROM users WHERE id = ?',
-      [assigned_to]
-    );
+    const [users] = await db.query("SELECT id FROM users WHERE id = ?", [
+      assigned_to,
+    ]);
 
     if (users.length === 0) {
-      return res.status(404).json({ message: 'User not found.' });
+      return res.status(404).json({ message: "User not found." });
     }
 
-    await db.query(
-      'UPDATE tasks SET assigned_to = ? WHERE id = ?',
-      [assigned_to, id]
-    );
+    await db.query("UPDATE tasks SET assigned_to = ? WHERE id = ?", [
+      assigned_to,
+      id,
+    ]);
 
-    res.status(200).json({ message: 'Task assigned successfully.' });
-
+    res.status(200).json({ message: "Task assigned successfully." });
   } catch (error) {
-    console.error('Assign task error:', error);
-    res.status(500).json({ message: 'Server error while assigning task.' });
+    console.error("Assign task error:", error);
+    res.status(500).json({ message: "Server error while assigning task." });
   }
 };
 
@@ -275,31 +260,27 @@ const addComment = async (req, res) => {
     const user_id = req.user.id;
 
     if (!comment) {
-      return res.status(400).json({ message: 'Comment text is required.' });
+      return res.status(400).json({ message: "Comment text is required." });
     }
 
-    const [tasks] = await db.query(
-      'SELECT id FROM tasks WHERE id = ?',
-      [id]
-    );
+    const [tasks] = await db.query("SELECT id FROM tasks WHERE id = ?", [id]);
 
     if (tasks.length === 0) {
-      return res.status(404).json({ message: 'Task not found.' });
+      return res.status(404).json({ message: "Task not found." });
     }
 
     const [result] = await db.query(
-      'INSERT INTO comments (task_id, user_id, comment) VALUES (?, ?, ?)',
+      "INSERT INTO comments (task_id, user_id, comment) VALUES (?, ?, ?)",
       [id, user_id, comment]
     );
 
     res.status(201).json({
-      message: 'Comment added successfully.',
+      message: "Comment added successfully.",
       comment_id: result.insertId,
     });
-
   } catch (error) {
-    console.error('Add comment error:', error);
-    res.status(500).json({ message: 'Server error while adding comment.' });
+    console.error("Add comment error:", error);
+    res.status(500).json({ message: "Server error while adding comment." });
   }
 };
 
@@ -309,13 +290,10 @@ const getComments = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const [tasks] = await db.query(
-      'SELECT id FROM tasks WHERE id = ?',
-      [id]
-    );
+    const [tasks] = await db.query("SELECT id FROM tasks WHERE id = ?", [id]);
 
     if (tasks.length === 0) {
-      return res.status(404).json({ message: 'Task not found.' });
+      return res.status(404).json({ message: "Task not found." });
     }
 
     const [comments] = await db.query(
@@ -332,17 +310,16 @@ const getComments = async (req, res) => {
     );
 
     res.status(200).json({
-        task_id: id,
-        total_comments: comments.length,
-        comments: comments.map((comment) => ({
-            ...comment,
-            created_at: formatDate(comment.created_at),
-        })),
+      task_id: id,
+      total_comments: comments.length,
+      comments: comments.map((comment) => ({
+        ...comment,
+        created_at: formatDate(comment.created_at),
+      })),
     });
-
   } catch (error) {
-    console.error('Get comments error:', error);
-    res.status(500).json({ message: 'Server error while fetching comments.' });
+    console.error("Get comments error:", error);
+    res.status(500).json({ message: "Server error while fetching comments." });
   }
 };
 
