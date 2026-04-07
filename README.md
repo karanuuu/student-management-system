@@ -45,4 +45,4 @@ I built the task management backend API using Node.js, Express.js and MySQL.
 - All 9 endpoints tested and working in Postman
 - Date formatting in East Africa Time Nairobi
 - Error handling for all edge cases
-  -Completed my part as member 4
+- Completed my part as member 4
