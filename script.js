@@ -12,54 +12,109 @@ function showPage(pageId) {
   if (pageId === "create") document.querySelectorAll(".nav-link")[1].classList.add("active");
 }
 
+// Fetch tasks from backend
+async function loadTasks() {
+  const res = await fetch("http://localhost:5000/api/tasks");
+  tasks = await res.json();
+  renderTasks();
+}
+
 // Handle Create Task
 const taskForm = document.getElementById("taskForm");
 if (taskForm) {
-  taskForm.addEventListener("submit", (e) => {
+  taskForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const task = {
-      id: tasks.length + 1,
       title: document.getElementById("title").value,
       description: document.getElementById("description").value,
       priority: document.getElementById("priority").value,
-      deadline: document.getElementById("deadline").value,
-      comments: []
+      deadline: document.getElementById("deadline").value
     };
-    tasks.push(task);
-    renderTasks();
+
+    await fetch("http://localhost:5000/api/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(task)
+    });
+
     taskForm.reset();
     showPage("tasks");
+    loadTasks(); // refresh list
   });
 }
 
-// Render Task List
-function renderTasks() {
+// Render Task List with inline comments
+async function renderTasks() {
   const taskList = document.getElementById("taskList");
   taskList.innerHTML = "";
-  tasks.forEach(task => {
+
+  for (const task of tasks) {
     const li = document.createElement("li");
     li.innerHTML = `
       <strong>${task.title}</strong> 
       <span class="priority-${task.priority}">(${task.priority})</span>
       - Due: ${task.deadline}
+      <div class="comments-container" id="comments-${task.id}"></div>
+      <div class="add-comment-inline">
+        <input type="text" id="inlineComment-${task.id}" placeholder="Add a comment...">
+        <button onclick="addInlineComment(${task.id})">Add</button>
+      </div>
     `;
-    li.addEventListener("click", () => showTaskDetails(task));
     taskList.appendChild(li);
-  });
+
+    // Load comments for each task
+    const res = await fetch(`http://localhost:5000/api/tasks/${task.id}/comments`);
+    const comments = await res.json();
+
+    const commentsDiv = document.getElementById(`comments-${task.id}`);
+    comments.forEach(c => {
+      const p = document.createElement("p");
+      p.classList.add("comment");
+      p.textContent = `${c.text} — ${c.author}`;
+      commentsDiv.appendChild(p);
+    });
+  }
 }
 
-// Show Task Details
-function showTaskDetails(task) {
+// Inline comment handler
+async function addInlineComment(taskId) {
+  const input = document.getElementById(`inlineComment-${taskId}`);
+  if (!input.value.trim()) return;
+
+  const comment = {
+    text: input.value,
+    author: "Student"
+  };
+
+  await fetch(`http://localhost:5000/api/tasks/${taskId}/comments`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(comment)
+  });
+
+  input.value = "";
+  loadTasks(); // refresh list to show new comment
+}
+
+// Show Task Details (still available if needed)
+async function showTaskDetails(task) {
   selectedTask = task;
   document.getElementById("detailTitle").textContent = task.title;
   document.getElementById("detailDescription").textContent = task.description;
   document.getElementById("detailDeadline").textContent = task.deadline;
   document.getElementById("detailPriority").textContent = task.priority;
-  renderComments();
+
+  await loadComments(task.id);
   showPage("details");
 }
 
-// Render Comments
+// Load comments for details view
+async function loadComments(taskId) {
+  const res = await fetch(`http://localhost:5000/api/tasks/${taskId}/comments`);
+  selectedTask.comments = await res.json();
+  renderComments();
+}
+
 function renderComments() {
   const commentsUl = document.getElementById("comments");
   commentsUl.innerHTML = "";
@@ -70,19 +125,5 @@ function renderComments() {
   });
 }
 
-// Add Comment
-const addCommentBtn = document.getElementById("addComment");
-if (addCommentBtn) {
-  addCommentBtn.addEventListener("click", () => {
-    const newCommentInput = document.getElementById("newComment");
-    if (!newCommentInput.value.trim()) return;
-    const comment = {
-      text: newCommentInput.value,
-      author: "Student",
-      timestamp: new Date().toLocaleString()
-    };
-    selectedTask.comments.push(comment);
-    newCommentInput.value = "";
-    renderComments();
-  });
-}
+// Initial load
+loadTasks();
