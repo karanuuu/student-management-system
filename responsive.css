@@ -1,0 +1,41 @@
+@media (max-width: 600px) {
+
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    width: 100%;
+    margin: 20px auto;
+    padding: 15px;
+  }
+
+  input {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  button {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .header, .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .header h2, .navbar h2 {
+    font-size: 18px;
+  }
+
+  .task {
+    padding: 12px;
+  }
+
+  .notification {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
