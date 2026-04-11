@@ -3,7 +3,7 @@ let selectedTask = null;
 //Added auth header helper function
 const getAuthHeader = () => ({
   "Content-Type": "application/json",
-  "Authorization":`Beare ${localStorage.getItem("token")}`
+  "Authorization":`Bearer ${localStorage.getItem("token")}`
 });
 //Redirect to login if no token found
 const token = localStorage.getItem("token");
@@ -36,6 +36,7 @@ async function loadTasks() {
 } catch(err) {
     console.error("Failed to load tasks:", err);
     alert("Could not load tasks. Please log in again.");
+}
 }
 
 // Handle Create Task
@@ -90,7 +91,7 @@ async function renderTasks() {
       if(!res.ok) throw new Error(`Error: ${res.status}`);
       
     const data = await res.json();
-    const comments = await res.json();
+    const comments = data.comments;
 
     const commentsDiv = document.getElementById(`comments-${task.id}`);
     comments.forEach(c => {
