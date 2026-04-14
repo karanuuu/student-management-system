@@ -2,6 +2,10 @@ body{
     font-family: 'Times New Roman', Times, serif;
     background-color: beige;
     background-image: url(images/Image\ background\ 3.jpg);
+    background-repeat: no-repeat;
+   background-size: cover;
+   background-position: center;
+   background-attachment: fixed;
     margin: 0;
 }
 .header{
