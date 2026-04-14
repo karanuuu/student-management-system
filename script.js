@@ -14,10 +14,35 @@ function showPage(pageId) {
 
 // Fetch tasks from backend
 async function loadTasks() {
-  const res = await fetch("http://localhost:5000/api/tasks");
-  tasks = await res.json();
-  renderTasks();
+  fetch("http://localhost:5000/api/tasks")
+    .then(res => res.json())
+    .then(tasks => {
+      const taskList = document.getElementById("taskList");
+      taskList.innerHTML = "";
+
+      tasks.forEach(task => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <strong>${task.title}</strong> 
+          <span class="priority-${task.priority}">(${task.priority})</span>
+          <br>${task.description}
+          <br><small>Deadline: ${task.deadline}</small>
+
+          <!-- Inline comments -->
+          <div class="comments-container" id="comments-${task._id}">
+            ${(task.comments || []).map(c => `<div class="comment">${c}</div>`).join("")}
+            <div class="add-comment-inline">
+              <input type="text" id="comment-input-${task._id}" placeholder="Add a comment...">
+              <button onclick="addInlineComment('${task._id}')">Add</button>
+            </div>
+          </div>
+        `;
+        li.onclick = () => showDetails(task._id);
+        taskList.appendChild(li);
+      });
+    });
 }
+
 
 // Handle Create Task
 const taskForm = document.getElementById("taskForm");
@@ -122,6 +147,26 @@ function renderComments() {
     const li = document.createElement("li");
     li.textContent = `${c.text} — ${c.author} (${c.timestamp})`;
     commentsUl.appendChild(li);
+  });
+}
+function addInlineComment(taskId) {
+  const input = document.getElementById(`comment-input-${taskId}`);
+  const comment = input.value.trim();
+  if (!comment) return;
+
+  fetch(`http://localhost:5000/api/tasks/${taskId}/comments`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ comment })
+  })
+  .then(res => res.json())
+  .then(updatedTask => {
+    const container = document.getElementById(`comments-${taskId}`);
+    const newComment = document.createElement("div");
+    newComment.className = "comment";
+    newComment.textContent = comment;
+    container.insertBefore(newComment, container.querySelector(".add-comment-inline"));
+    input.value = "";
   });
 }
 

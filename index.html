@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Student Assignment Manager</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
   <!-- Navigation -->
@@ -22,17 +24,44 @@
     <!-- Create Task -->
     <section id="create" class="page hidden">
       <h1>Create a New Task</h1>
-      <form id="taskForm" class="card">
-        <input type="text" id="title" placeholder="Task Title" required>
-        <textarea id="description" placeholder="Description"></textarea>
-        <select id="priority">
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-        <input type="date" id="deadline" required>
-        <button type="submit">Create Task</button>
-      </form>
+      <div class="card form-card">
+        <!-- Alert messages -->
+        <div id="formAlert" class="alert hidden"></div>
+
+        <form id="taskForm">
+          <div class="form-group">
+            <label for="title">Task Title</label>
+            <input type="text" id="title" required>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" rows="4"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group half">
+              <label for="priority"><i class="fa-solid fa-hourglass-half"></i> Priority</label>
+              <select id="priority">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+
+            <div class="form-group half">
+              <label for="deadline"><i class="fa-solid fa-calendar-days"></i> Deadline</label>
+              <input type="date" id="deadline" required>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">
+              <i class="fa-solid fa-plus"></i> Create Task
+            </button>
+          </div>
+        </form>
+      </div>
     </section>
 
     <!-- Task Details -->
