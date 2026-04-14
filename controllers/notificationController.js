@@ -1,6 +1,6 @@
 const db = require("../config/db");
 
-// Format date → 4/13/2026
+// Format date 
 const formatDate = (dateStr) => {
   return new Intl.DateTimeFormat("en-US", {
     timeZone: "Africa/Nairobi",
@@ -10,7 +10,7 @@ const formatDate = (dateStr) => {
   }).format(new Date(dateStr));
 };
 
-// Format time → 8:00pm
+// Format time 
 const formatTime = (dateStr) => {
   const time = new Intl.DateTimeFormat("en-US", {
     timeZone: "Africa/Nairobi",
