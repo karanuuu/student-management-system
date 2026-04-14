@@ -10,6 +10,7 @@ if (!token) {
   window.location.href = "login.html";
 }
 
+
 // Fetch and display tasks
 async function getTasks() {
   try {
