@@ -1,5 +1,15 @@
 let tasks = [];
 let selectedTask = null;
+//Added auth header helper function
+const getAuthHeader = () => ({
+  "Content-Type": "application/json",
+  "Authorization":`Bearer ${localStorage.getItem("token")}`
+});
+Redirect to login if no token found
+const token = localStorage.getItem("token");
+if(!token){
+  window.location.href = "/login.html";
+}
 
 // Page switching
 function showPage(pageId) {
@@ -28,21 +38,27 @@ async function loadTasks() {
           <br>${task.description}
           <br><small>Deadline: ${task.deadline}</small>
 
+          <!-- Toggle comments -->
+          <button class="toggle-comments" onclick="toggleComments('${task._id}')">Show Comments</button>
+
           <!-- Inline comments -->
-          <div class="comments-container" id="comments-${task._id}">
+          <div class="comments-container hidden" id="comments-${task._id}">
             ${(task.comments || []).map(c => `<div class="comment">${c}</div>`).join("")}
             <div class="add-comment-inline">
               <input type="text" id="comment-input-${task._id}" placeholder="Add a comment...">
               <button onclick="addInlineComment('${task._id}')">Add</button>
             </div>
           </div>
+
+          <!-- Delete icon -->
+          <button class="delete-task" onclick="deleteTask('${task._id}')" title="Delete Task">
+            🗑️
+          </button>
         `;
-        li.onclick = () => showDetails(task._id);
         taskList.appendChild(li);
       });
     });
 }
-
 
 // Handle Create Task
 const taskForm = document.getElementById("taskForm");
@@ -58,7 +74,7 @@ if (taskForm) {
 
     await fetch("http://localhost:5000/api/tasks", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeader(),
       body: JSON.stringify(task)
     });
 
@@ -88,16 +104,27 @@ async function renderTasks() {
     taskList.appendChild(li);
 
     // Load comments for each task
-    const res = await fetch(`http://localhost:5000/api/tasks/${task.id}/comments`);
-    const comments = await res.json();
+    try{
+    const res = await fetch(`http://localhost:5000/api/tasks/${task.id}/comments`, {
+      headers: getAuthHeader()
+    });
+
+      if(!res.ok) throw new Error(`Error: ${res.status}`);
+      
+    const data = await res.json();
+    const comments = data.comments;
 
     const commentsDiv = document.getElementById(`comments-${task.id}`);
     comments.forEach(c => {
       const p = document.createElement("p");
       p.classList.add("comment");
-      p.textContent = `${c.text} — ${c.author}`;
+      p.textContent = `${c.comment} — ${c.commented_by}`;
       commentsDiv.appendChild(p);
     });
+    }
+    catch(err) {
+      console.error(`Failed to load comments for task ${task.id}:`, err);
+    }
   }
 }
 
@@ -105,23 +132,25 @@ async function renderTasks() {
 async function addInlineComment(taskId) {
   const input = document.getElementById(`inlineComment-${taskId}`);
   if (!input.value.trim()) return;
-
-  const comment = {
-    text: input.value,
-    author: "Student"
-  };
+  try{
+    const body = {comment: input.value};
 
   await fetch(`http://localhost:5000/api/tasks/${taskId}/comments`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(comment)
+    headers: getAuthHeader(),
+    body: JSON.stringify(body)
   });
 
   input.value = "";
   loadTasks(); // refresh list to show new comment
+  }
+  catch(err) {
+    console.error("Failed to add comment:", err);
+    alert("Could not add comment. Please try again.");
+  }
 }
 
-// Show Task Details (still available if needed)
+// Show Task Details
 async function showTaskDetails(task) {
   selectedTask = task;
   document.getElementById("detailTitle").textContent = task.title;
@@ -135,9 +164,19 @@ async function showTaskDetails(task) {
 
 // Load comments for details view
 async function loadComments(taskId) {
-  const res = await fetch(`http://localhost:5000/api/tasks/${taskId}/comments`);
-  selectedTask.comments = await res.json();
+  try{
+  const res = await fetch(`http://localhost:5000/api/tasks/${taskId}/comments`, {
+    headers: getAuthHeader()
+  });
+  
+  if (!res.ok) throw new Error(`Error: ${res.status}`);
+    const data = await res.json();
+  selectedTask.comments = data.comments;
   renderComments();
+  }
+  catch(err){
+    console.error("Failed to load comments:", err);
+  }
 }
 
 function renderComments() {
@@ -145,7 +184,7 @@ function renderComments() {
   commentsUl.innerHTML = "";
   selectedTask.comments.forEach(c => {
     const li = document.createElement("li");
-    li.textContent = `${c.text} — ${c.author} (${c.timestamp})`;
+    li.textContent = `${c.comment} — ${c.commented_by} (${c.created_at})`;
     commentsUl.appendChild(li);
   });
 }
@@ -169,6 +208,23 @@ function addInlineComment(taskId) {
     input.value = "";
   });
 }
+function deleteTask(taskId) {
+  if (!confirm("Are you sure you want to delete this task?")) return;
 
-// Initial load
-loadTasks();
+  fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+    method: "DELETE"
+  })
+  .then(res => {
+    if (res.ok) {
+      loadTasks(); // refresh list after deletion
+    } else {
+      alert("Failed to delete task.");
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Error deleting task.");
+  });
+}
+
+
