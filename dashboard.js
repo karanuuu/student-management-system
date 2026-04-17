@@ -10,21 +10,34 @@ if (!token) {
   window.location.href = "login.html";
 }
 
-
 // Fetch and display tasks
 async function getTasks() {
   try {
     const response = await fetch(`${API}/tasks`, {
       headers: {
-        "Authorization": `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
 
-    const tasks = await response.json();
+    if (!response.ok) {
+      alert("Session expired. Please login again.");
+      window.location.href = "login.html";
+      return;
+    }
+
+    const data = await response.json();
+    const tasks = data.tasks || data;
+
     const container = document.getElementById("tasks-container");
 
     // Clear previous content
     container.innerHTML = "";
+
+    if (!Array.isArray(tasks)) {
+      container.innerHTML = "<p>Could not load tasks. Please try again.</p>";
+      console.error("Unexpected response:", data);
+      return;
+    }
 
     // If no tasks
     if (tasks.length === 0) {
@@ -33,7 +46,7 @@ async function getTasks() {
     }
 
     // Display tasks
-    tasks.forEach(task => {
+    tasks.forEach((task) => {
       const div = document.createElement("div");
       div.classList.add("task");
 
@@ -58,7 +71,6 @@ async function getTasks() {
 
       container.appendChild(div);
     });
-
   } catch (error) {
     console.error(error);
     alert("Error loading tasks");
@@ -75,5 +87,5 @@ function logout() {
 getTasks();
 
 function goToNotifications() {
-  window.location.href = "notifications.html";
+  window.location.href = "notification.html";
 }

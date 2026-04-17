@@ -1,10 +1,19 @@
-async function register() {
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+function showMessage(message, type) {
+  const box = document.getElementById("messageBox");
 
+  box.className = "message-box " + type;
+  box.innerText = message;
+  box.style.display = "block";
+}
+
+async function register() {
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  //added inline message
   if (!name || !email || !password) {
-    alert("Please fill all fields");
+    showMessage("Please fill all fields.", "error");
     return;
   }
 
@@ -12,24 +21,26 @@ async function register() {
     const response = await fetch("http://localhost:5000/api/auth/register", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, email, password })
+      body: JSON.stringify({ name, email, password }),
     });
 
     const data = await response.json();
 
     if (response.ok) {
-      alert("Registration successful!");
+      showMessage(
+        "Registration successful! Redirecting to login page...",
+        "success"
+      );
 
-      // Redirect to login page
-      window.location.href = "login.html";
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 2000);
     } else {
-      alert(data.message || "Registration failed");
+      showMessage(data.message || "Registration failed.", "error");
     }
-
   } catch (error) {
-    console.error(error);
-    alert("Server error");
+    showMessage("Server error. Please try again.", "error");
   }
 }

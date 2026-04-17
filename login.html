@@ -1,20 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF=8">
-        <title>Login Page</title>
-        <link rel="stylesheet" href="login.css">
-        <link rel = "stylesheet" href="responsive.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div class="container">
-            <h1>Login</h1>
-            <input type="email" placeholder="Enter your Email" id="email">
-            <input type="password" placeholder="Enter your password" id="password">
-            <button onclick= "Login()">Login</button>
-            <p> Don't have an account ? <a href="register.html">Register</a></p>
-        </div>
-        <script src="login.js"></script>
-    </body>
+  <head>
+    <!--was "UTF=8"-->
+    <meta charset="UTF-8" />
+    <title>Login Page</title>
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <!--added login-page class-->
+  <body class="login-page">
+    <div class="container">
+      <h1>Login</h1>
+      <!-- Added error message div was previously using alert-->
+      <div id="error-message" class="error-box" style="display: none"></div>
+
+      <input type="email" placeholder="Enter your Email" id="email" />
+      <input type="password" placeholder="Enter your password" id="password" />
+
+      <!--Added showPassword checkbox which was in login.js but missing here-->
+      <label class="show-password-label">
+        <input type="checkbox" id="showPassword" /> Show password
+      </label>
+      <!--Changed Login() to login() to match login.js-->
+      <button onclick="login()">Login</button>
+      <p>Don't have an account ? <a href="register.html">Register</a></p>
+    </div>
+    <script src="login.js"></script>
+  </body>
 </html>
