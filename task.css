@@ -1,21 +1,24 @@
 body {
   font-family: "Segoe UI", Arial, sans-serif;
-  background: url("images/project background.jpeg") no-repeat center top fixed;
-  background-size: cover;   /* fills screen */
+  background: url("images/bg-dashboard.jpg") no-repeat center top fixed;
+  background-size: cover; /* fills screen */
   background-position: top center; /* anchors image at top */
   color: #333;
   line-height: 1.6;
 }
 
 .container {
-  max-width: 1200px;
-  margin: auto;
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 20px;
 }
 
-
-
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   margin-bottom: 10px;
 }
 
@@ -25,12 +28,12 @@ h1, h2, h3 {
   margin: 15px 0;
   border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.hidden { display: none; }
-
-
+.hidden {
+  display: none;
+}
 
 .nav-link {
   color: white;
@@ -41,13 +44,18 @@ h1, h2, h3 {
   transition: background 0.3s;
 }
 
-.nav-link:hover { background: #0056b3; }
-.nav-link.active { background: #0056b3; }
+.nav-link:hover {
+  background: #0056b3;
+}
+.nav-link.active {
+  background: #0056b3;
+}
 
 /* Two-column layout for tasks + create form */
-#tasks, #create {
+#tasks,
+#create {
   display: inline-block;
-  color: white;
+  color: whitesmoke;
   vertical-align: top;
   width: 48%;
 }
@@ -61,12 +69,21 @@ li {
   padding: 12px;
   border: 1px solid #eee;
   border-radius: 6px;
-  background: #fafafa;
+  background: burlywood;
 }
 
-.priority-low { color: green; font-weight: bold; }
-.priority-medium { color: orange; font-weight: bold; }
-.priority-high { color: red; font-weight: bold; }
+.priority-low {
+  color: green;
+  font-weight: bold;
+}
+.priority-medium {
+  color: orange;
+  font-weight: bold;
+}
+.priority-high {
+  color: red;
+  font-weight: bold;
+}
 
 /* Inline Comments */
 .comments-container {
@@ -77,9 +94,9 @@ li {
 
 .comment {
   font-size: 0.9em;
-  color: burlywood;
+  color: hsl(0, 9%, 10%);
   margin: 4px 0;
-  background: #f1f3f5;
+  background: white;
   padding: 6px 10px;
   border-radius: 6px;
 }
@@ -115,7 +132,7 @@ li {
 }
 
 #comments li {
-  background: #eef2f7yes;
+  background: #eef2f7;
   padding: 8px;
   margin: 6px 0;
   border-radius: 6px;
@@ -150,7 +167,9 @@ li {
   padding: 8px 12px;
   border-radius: 4px;
 }
-.back-btn:hover { background: #5a6268; }
+.back-btn:hover {
+  background: #5a6268;
+}
 
 /* Form Styling */
 .form-card {
@@ -188,7 +207,7 @@ li {
 .form-group select:focus {
   border-color: #007bff;
   outline: none;
-  box-shadow: 0 0 4px rgba(0,123,255,0.3);
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
 }
 
 .form-row {
@@ -217,16 +236,51 @@ li {
   margin-top: 8px;
   background: transparent;
   border: none;
-  font-size: 1.2em; 
+  font-size: 1.2em;
   cursor: pointer;
 }
 
 .delete-task:hover {
-  color: #dc3545; 
+  color: #dc3545;
 }
 
 .delete-task:focus {
   outline: none;
 }
 
- 
+/* User role display */
+#userRole {
+  background: burlywood;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+/* Navbar layout fix */
+.navbar {
+  background: #343a40;
+  padding: 20px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.navbar > div {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+/* Responsive navbar */
+@media (max-width: 600px) {
+  .navbar > div {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .navbar {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
