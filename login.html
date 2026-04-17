@@ -17,11 +17,19 @@
       <input type="email" placeholder="Enter your Email" id="email" />
       <input type="password" placeholder="Enter your password" id="password" />
 
-      <!--Added showPassword checkbox which was in login.js but missing here-->
+      <!-- added role functionality -->
+      <select
+        id="role"
+        style="width: 90%; padding: 10px; margin: 10px 0; border-radius: 10px"
+      >
+        <option value="">Select role</option>
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+      </select>
+
       <label class="show-password-label">
         <input type="checkbox" id="showPassword" /> Show password
       </label>
-      <!--Changed Login() to login() to match login.js-->
       <button onclick="login()">Login</button>
       <p>Don't have an account ? <a href="register.html">Register</a></p>
     </div>
