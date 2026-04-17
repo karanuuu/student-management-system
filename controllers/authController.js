@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const mysql = require("mysql2/promise");
+const db = require("../config/db");
 
 // Database connection
 const pool = mysql.createPool({
