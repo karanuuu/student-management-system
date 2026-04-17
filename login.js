@@ -19,15 +19,22 @@ function hideError() {
   errorBox.textContent = "";
 }
 
+//login
 async function login() {
-  hideError(); // clear any previous error before new attempt
+  hideError();
 
   const email = document.getElementById("email").value.trim();
   const password = passwordInput.value.trim();
+  const role = document.getElementById("role").value;
 
   if (!email || !password) {
-    // changed, now shows styled inline error box
-    showError("Username and password are required.");
+    showError("Email and password are required.");
+    return;
+  }
+
+  // validation
+  if (!role) {
+    showError("Please select a role (Student or Teacher).");
     return;
   }
 
@@ -35,7 +42,7 @@ async function login() {
     const response = await fetch("http://localhost:5000/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, role }),
     });
 
     const data = await response.json();
@@ -43,14 +50,16 @@ async function login() {
 
     if (data.token) {
       localStorage.setItem("token", data.token);
-      window.location.href = "dashboard.html";
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("role", data.user.role);
+
+      // changed to task.html (not dashboard.html)
+      window.location.href = "task.html";
     } else {
-      // changed, now shows styled inline error box
       showError(data.message || "Wrong email or password.");
     }
   } catch (err) {
     console.error(err);
-    // changed, now shows styled inline error box
     showError("Server error. Try again later.");
   }
 }

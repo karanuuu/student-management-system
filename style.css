@@ -1,3 +1,12 @@
+/* ============================================================
+   styles.css — Single Stylesheet for All Pages
+   Pages: login | register | dashboard | notification
+   ============================================================ */
+
+/* ============================================================
+   1. SHARED BASE STYLES
+   ============================================================ */
+
 body {
   font-family: "Times New Roman", Times, serif;
   background-color: beige;
@@ -8,6 +17,7 @@ body {
   margin: 0;
 }
 
+/* Shared: form inputs */
 input {
   width: 90%;
   padding: 10px;
@@ -16,6 +26,7 @@ input {
   outline: none;
 }
 
+/* Shared: buttons */
 button {
   display: block;
   margin: 20px auto;
@@ -31,6 +42,7 @@ button:hover {
   background: rgb(234, 206, 170);
 }
 
+/* Shared: page header bar (dashboard + notification) */
 .header {
   display: flex;
   justify-content: space-between;
@@ -38,6 +50,7 @@ button:hover {
   background: wheat;
 }
 
+/* Shared: form container (login + register) */
 .container {
   width: 500px;
   margin: 1px auto;
@@ -46,7 +59,10 @@ button:hover {
   border-radius: 10px;
 }
 
-/*LOGIN PAGE*/
+/* ============================================================
+   2. LOGIN PAGE
+   Add class="login-page" to <body> in login.html
+   ============================================================ */
 
 body.login-page {
   background-image: url("../images/bg-login.jpg");
@@ -64,7 +80,7 @@ body.login-page {
   font-size: 14px;
 }
 
-/* Show/hide password checkbox  */
+/* Show/hide password checkbox row */
 .show-password-label {
   display: flex;
   align-items: center;
@@ -80,7 +96,10 @@ body.login-page {
   cursor: pointer;
 }
 
-/*REGISTER PAGE*/
+/* ============================================================
+   3. REGISTER PAGE
+   Add class="register-page" to <body> in register.html
+   ============================================================ */
 
 body.register-page {
   background-image: url("../images/bg-register.jpg");
@@ -91,6 +110,7 @@ body.register-page p {
   font-weight: 600;
 }
 
+/* Frosted-glass inner card (optional use in register.html) */
 .login-container {
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(5px);
@@ -123,7 +143,10 @@ body.register-page p {
   color: #b91c1c;
 }
 
-/*DASHBOARD PAGE */
+/* ============================================================
+   4. DASHBOARD PAGE
+   Add class="dashboard-page" to <body> in dashboard.html
+   ============================================================ */
 
 body.dashboard-page {
   background-image: url("../images/bg-dashboard.jpg");
@@ -145,11 +168,15 @@ body.dashboard-page {
   margin: 0 0 10px;
 }
 
+/* Dashboard buttons use a beige hover instead of the shared tan */
 body.dashboard-page button:hover {
   background: beige;
 }
 
-/*NOTIFICATION PAGE*/
+/* =============================================
+   NOTIFICATION PAGE — notification-specific styles
+   Add to styles.css or keep as standalone
+   ============================================= */
 
 body.notification-page {
   background-image: url("../images/bg-notification.jpg");
@@ -320,4 +347,27 @@ body.notification-page {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+/* Role select dropdown styling */
+#role {
+  width: 90%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#role:focus {
+  outline: none;
+  border-color: burlywood;
+  box-shadow: 0 0 5px rgba(222, 184, 135, 0.5);
+}
+
+/* Make sure select looks consistent with inputs */
+select {
+  font-family: "Times New Roman", Times, serif;
 }

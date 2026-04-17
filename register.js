@@ -10,10 +10,16 @@ async function register() {
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
+  const role = document.getElementById("role").value;
 
-  //added inline message
   if (!name || !email || !password) {
     showMessage("Please fill all fields.", "error");
+    return;
+  }
+
+  // validation
+  if (!role) {
+    showMessage("Please select a role (Student or Teacher).", "error");
     return;
   }
 
@@ -23,7 +29,7 @@ async function register() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, password, role }),
     });
 
     const data = await response.json();
