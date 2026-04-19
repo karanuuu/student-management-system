@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF=8" />
+    <title>Register Page</title>
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <!--added class="register-page"-->
+  <body class="register-page">
+    <div class="container">
+      <h1>Register</h1>
+      <div id="messageBox" class="message-box"></div>
+      <input type="text" id="name" placeholder="Enter Your Name" />
+      <input type="text" id="email" placeholder="Enter Your Email" />
+      <input type="password" id="password" placeholder="Enter Your Password" />
+
+      <!-- added this-->
+      <select
+        id="role"
+        style="width: 90%; padding: 10px; margin: 10px 0; border-radius: 10px"
+      >
+        <option value="">Select role</option>
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+      </select>
+      <button onclick="register ()">Register</button>
+
+      <p>
+        Already have an account?
+        <a href="login.html" style="color: #ffcc00"> Login</a>
+      </p>
+    </div>
+
+    <script src="register.js"></script>
+  </body>
+</html>

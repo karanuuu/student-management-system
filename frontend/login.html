@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!--was "UTF=8"-->
+    <meta charset="UTF-8" />
+    <title>Login Page</title>
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <!--added login-page class-->
+  <body class="login-page">
+    <div class="container">
+      <h1>Login</h1>
+      <!-- Added error message div was previously using alert-->
+      <div id="error-message" class="error-box" style="display: none"></div>
+
+      <input type="email" placeholder="Enter your Email" id="email" />
+      <input type="password" placeholder="Enter your password" id="password" />
+
+      <!-- added role functionality -->
+      <select
+        id="role"
+        style="width: 90%; padding: 10px; margin: 10px 0; border-radius: 10px"
+      >
+        <option value="">Select role</option>
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+      </select>
+
+      <label class="show-password-label">
+        <input type="checkbox" id="showPassword" /> Show password
+      </label>
+      <button onclick="login()">Login</button>
+      <p>Don't have an account ? <a href="register.html">Register</a></p>
+    </div>
+    <script src="login.js"></script>
+  </body>
+</html>
