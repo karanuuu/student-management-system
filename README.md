@@ -2,7 +2,7 @@
 
 ## My Role
 
-I built the task management backend API using Node.js, Express.js and MySQL.
+I built the task management backend API using Node.js, Express.js.
 
 ## My API Endpoints
 
