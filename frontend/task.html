@@ -21,11 +21,25 @@
           width: 100%;
         "
       >
-        <div>
-          <!-- Only keep Tasks link, remove Create Task from nav -->
+        <!--<div>
           <a href="#" onclick="showPage('tasks')" class="nav-link active"
             >Tasks</a
           >
+        </div>-->
+        <div>
+          <button
+            onclick="getNotifications()"
+            style="
+              background: burlywood;
+              color: white;
+              border: none;
+              padding: 5px 15px;
+              border-radius: 5px;
+              cursor: pointer;
+            "
+          >
+            notifications
+          </button>
         </div>
         <div>
           <span id="userRole" style="margin-right: 15px; color: white"></span>

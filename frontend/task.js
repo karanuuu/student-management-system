@@ -36,6 +36,10 @@ function logout() {
   localStorage.removeItem("role");
   window.location.href = "login.html";
 }
+//notification function
+function getNotifications() {
+  window.location.href = "notification.html";
+}
 
 // Fetch tasks from backend
 async function loadTasks() {
