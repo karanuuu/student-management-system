@@ -40,9 +40,12 @@ function logout() {
 // Fetch tasks from backend
 async function loadTasks() {
   try {
-    const response = await fetch("http://localhost:5000/api/tasks", {
-      headers: getAuthHeader(),
-    });
+    const response = await fetch(
+      "https://student-management-system-production-1ee7.up.railway.app/api/tasks",
+      {
+        headers: getAuthHeader(),
+      }
+    );
 
     if (!response.ok) {
       if (response.status === 401 || response.status === 403) {
@@ -110,7 +113,7 @@ function toggleComments(taskId) {
 async function loadCommentsForTask(taskId) {
   try {
     const response = await fetch(
-      `http://localhost:5000/api/tasks/${taskId}/comments`,
+      `https://student-management-system-production-1ee7.up.railway.app/api/tasks/${taskId}/comments`,
       {
         headers: getAuthHeader(),
       }
@@ -151,11 +154,14 @@ if (taskForm) {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/tasks", {
-        method: "POST",
-        headers: getAuthHeader(),
-        body: JSON.stringify(task),
-      });
+      const response = await fetch(
+        "https://student-management-system-production-1ee7.up.railway.app/api/tasks",
+        {
+          method: "POST",
+          headers: getAuthHeader(),
+          body: JSON.stringify(task),
+        }
+      );
 
       if (response.ok) {
         taskForm.reset();
@@ -180,7 +186,7 @@ async function addInlineComment(taskId) {
 
   try {
     const response = await fetch(
-      `http://localhost:5000/api/tasks/${taskId}/comments`,
+      `https://student-management-system-production-1ee7.up.railway.app/api/tasks/${taskId}/comments`,
       {
         method: "POST",
         headers: getAuthHeader(),
@@ -208,10 +214,13 @@ async function addInlineComment(taskId) {
 function deleteTask(taskId) {
   if (!confirm("Are you sure you want to delete this task?")) return;
 
-  fetch(`http://localhost:5000/api/tasks/${taskId}`, {
-    method: "DELETE",
-    headers: getAuthHeader(),
-  })
+  fetch(
+    `https://student-management-system-production-1ee7.up.railway.app/api/tasks/${taskId}`,
+    {
+      method: "DELETE",
+      headers: getAuthHeader(),
+    }
+  )
     .then((res) => {
       if (res.ok) {
         loadTasks();

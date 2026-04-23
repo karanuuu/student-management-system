@@ -39,11 +39,14 @@ async function login() {
   }
 
   try {
-    const response = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, role }),
-    });
+    const response = await fetch(
+      "https://student-management-system-production-1ee7.up.railway.app/api/auth/login",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, role }),
+      }
+    );
 
     const data = await response.json();
     console.log(data);
