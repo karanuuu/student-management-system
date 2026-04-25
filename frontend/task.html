@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <title>Student Assignment Manager</title>
     <link rel="stylesheet" href="task.css" />
-    <!-- Font Awesome for icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -13,46 +12,21 @@
   <body>
     <!-- Navigation -->
     <nav class="navbar">
-      <div
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          width: 100%;
-        "
-      >
-        <!--<div>
-          <a href="#" onclick="showPage('tasks')" class="nav-link active"
-            >Tasks</a
-          >
-        </div>-->
+      <div style="display:flex;justify-content:space-between;align-items:center;width:100%;">
         <div>
           <button
             onclick="getNotifications()"
-            style="
-              background: burlywood;
-              color: white;
-              border: none;
-              padding: 5px 15px;
-              border-radius: 5px;
-              cursor: pointer;
-            "
+            style="background:burlywood;color:white;border:none;padding:5px 15px;border-radius:5px;cursor:pointer;"
           >
-            notifications
+            Notifications
           </button>
         </div>
         <div>
-          <span id="userRole" style="margin-right: 15px; color: white"></span>
+          <span id="userGreeting" style="margin-right:15px;color:white;font-weight:bold;"></span>
+          <span id="userRole" style="margin-right:15px;color:#f0d9b5;font-size:0.9em;"></span>
           <button
             onclick="logout()"
-            style="
-              background: burlywood;
-              color: white;
-              border: none;
-              padding: 5px 15px;
-              border-radius: 5px;
-              cursor: pointer;
-            "
+            style="background:burlywood;color:white;border:none;padding:5px 15px;border-radius:5px;cursor:pointer;"
           >
             Logout
           </button>
@@ -63,15 +37,14 @@
     <div class="container">
       <!-- Task List -->
       <section id="tasks" class="page">
-        <h1>All Tasks</h1>
+        <h1 id="taskListHeading">Tasks</h1>
         <ul id="taskList"></ul>
       </section>
 
-      <!-- Create Task (starts visible as in your screenshot) -->
-      <section id="create" class="page">
-        <h1>Create a New Task</h1>
+      <!-- Create Task — only visible to teachers -->
+      <section id="create" class="page" style="display:none;">
+        <h1>Create &amp; Assign a Task</h1>
         <div class="card form-card">
-          <!-- Alert messages -->
           <div id="formAlert" class="alert hidden"></div>
 
           <form id="taskForm">
@@ -87,9 +60,9 @@
 
             <div class="form-row">
               <div class="form-group half">
-                <label for="priority"
-                  ><i class="fa-solid fa-hourglass-half"></i> Priority</label
-                >
+                <label for="priority">
+                  <i class="fa-solid fa-hourglass-half"></i> Priority
+                </label>
                 <select id="priority">
                   <option value="Low">Low</option>
                   <option value="Medium">Medium</option>
@@ -98,37 +71,29 @@
               </div>
 
               <div class="form-group half">
-                <label for="deadline"
-                  ><i class="fa-solid fa-calendar-days"></i> Deadline</label
-                >
+                <label for="deadline">
+                  <i class="fa-solid fa-calendar-days"></i> Deadline
+                </label>
                 <input type="date" id="deadline" />
               </div>
             </div>
 
+            <!-- Assign to student dropdown — populated by JS -->
+            <div class="form-group">
+              <label for="assigned_to">
+                <i class="fa-solid fa-user-graduate"></i> Assign To
+              </label>
+              <select id="assigned_to" required>
+                <option value="">-- Select a student --</option>
+              </select>
+            </div>
+
             <div class="form-actions">
               <button type="submit" class="btn-primary">
-                <i class="fa-solid fa-plus"></i> Create Task
+                <i class="fa-solid fa-plus"></i> Create &amp; Assign Task
               </button>
             </div>
           </form>
-        </div>
-      </section>
-
-      <!-- Task Details (hidden by default) -->
-      <section id="details" class="page hidden">
-        <button onclick="showPage('tasks')" class="back-btn">
-          ← Back to Tasks
-        </button>
-        <h1 id="detailTitle"></h1>
-        <p id="detailDescription"></p>
-        <p><strong>Deadline:</strong> <span id="detailDeadline"></span></p>
-        <p><strong>Priority:</strong> <span id="detailPriority"></span></p>
-
-        <div id="commentsSection">
-          <h3>Comments</h3>
-          <ul id="comments"></ul>
-          <input type="text" id="newComment" placeholder="Add a comment..." />
-          <button id="addComment">Add</button>
         </div>
       </section>
     </div>

@@ -44,12 +44,20 @@ async function getNotifications() {
       return;
     }
 
+    // Update count badge
+    const badge = document.getElementById("notif-count");
+    if (badge) badge.textContent = notifications.length;
+
     notifications.forEach((note) => {
       const div = document.createElement("div");
       div.classList.add("notification");
       div.innerHTML = `
         <div class="icon">${note.icon}</div>
-        <div class="text">${note.text}</div>
+        <div class="notif-body">
+          <div class="text">${note.text}</div>
+          <div class="notif-time">Just now</div>
+        </div>
+        <svg class="notif-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       `;
       container.appendChild(div);
     });

@@ -12,7 +12,10 @@ const {
   assignTask,
   addComment,
   getComments,
+  getStudents,
 } = require("../controllers/taskController");
+
+router.get("/students", verifyToken, getStudents);
 
 router.post("/", verifyToken, createTask);
 router.get("/", verifyToken, getAllTasks);
